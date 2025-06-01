@@ -83,4 +83,52 @@ public class Draggable : MonoBehaviour
             currentSnapZone = null;
         }
     }
+
+    public void SetDraggable(bool isDragging)
+    {
+        this.isDragging = isDragging;
+    }
+
+
+    void Update()
+{
+    if (isDragging)
+    {
+            if(Input.GetMouseButton(0))
+            {
+                Vector3 mousePos = GetMouseWorldPosition();
+                transform.position = mousePos + offset;
+            } else
+            {
+                isDragging = false;
+            }
+
+    }
+
+    
+}
+    void OnEnable()
+    {
+        mainCamera = Camera.main;
+
+        // Si el mouse ya está presionado al activarse
+        if (Input.GetMouseButton(0))
+        {
+            Vector3 mousePos = GetMouseWorldPosition();
+
+            // Verificamos si el mouse está sobre este objeto con un raycast
+            Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
+            if (Physics.Raycast(ray, out RaycastHit hit))
+            {
+                if (hit.transform == transform)
+                {
+                    // Simulamos el OnMouseDown
+                    isDragging = true;
+                    startPosition = transform.position;
+                    offset = transform.position - mousePos;
+                    GameMaster.Instance.GrabItem(gameObject);
+                }
+            }
+        }
+    }
 }

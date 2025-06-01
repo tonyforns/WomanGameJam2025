@@ -24,6 +24,7 @@ public class InventoryPreviewSlot : MonoBehaviour, IPointerDownHandler
         slotCamera.targetTexture = rt;
         slotImage.texture = rt;
 
+        slotButton.onClick.AddListener(GetItem);
     }
 
     public void SetItem(GameObject instantiatedModel)
@@ -31,12 +32,12 @@ public class InventoryPreviewSlot : MonoBehaviour, IPointerDownHandler
         instantiatedModel.layer = LayerMask.NameToLayer("InventoryPreview");
         foreach (Transform child in instantiatedModel.GetComponentsInChildren<Transform>())
             child.gameObject.layer = LayerMask.NameToLayer("InventoryPreview");
-        instantiatedModel.transform.SetParent(transform);
     }
 
     internal void Show(GameObject item)
     {
         GameObject newItem = Instantiate(item, parentTransform);
+        newItem.transform.localPosition = Vector3.zero;
         SetItem(newItem);
         savedItem = item;
         item.gameObject.SetActive(false);
@@ -50,8 +51,10 @@ public class InventoryPreviewSlot : MonoBehaviour, IPointerDownHandler
     private void GetItem()
     {
         savedItem.gameObject.SetActive(true);
-        Vector3 worldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        Debug.Log(Camera.main.ScreenToWorldPoint(Input.mousePosition));
+        Vector3 worldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition) + Vector3.forward * 3 ;
         savedItem.transform.position = worldPos;
+        Destroy(gameObject);
     }
 
     public void OnPointerDown(PointerEventData eventData)
