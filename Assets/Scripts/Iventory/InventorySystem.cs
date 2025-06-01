@@ -13,11 +13,11 @@ public class InventorySystem : Singleton<InventorySystem>
     {
         base.Awake();
         itemList = new List<InventoryPreviewSlot>();
-        //AddItem(Instantiate(box));
 
     }
     public void AddItem(GameObject item)
     {
+        Debug.Log(item.ToString());
         InventoryPreviewSlot newItem = Instantiate(containerPrefab, parentContainer).GetComponent<InventoryPreviewSlot>();
 
         newItem.Show(item);

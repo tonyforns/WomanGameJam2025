@@ -13,13 +13,13 @@ public class InventoryPreviewSlot : MonoBehaviour, IPointerDownHandler
 
     private GameObject savedItem;
     public Vector3 modelOffset = Vector3.zero;
-    public float renderTextureSize = 50;
+    public Vector2 renderTextureSize = new Vector2(116, 113);
 
     [SerializeField] 
 
     private void Awake()
     {
-        RenderTexture rt = new RenderTexture((int)renderTextureSize, (int)renderTextureSize, 16);
+        RenderTexture rt = new RenderTexture((int)renderTextureSize.x, (int)renderTextureSize.y, 16);
         rt.Create();
         slotCamera.targetTexture = rt;
         slotImage.texture = rt;
@@ -36,9 +36,7 @@ public class InventoryPreviewSlot : MonoBehaviour, IPointerDownHandler
 
     internal void Show(GameObject item)
     {
-        GameObject newItem = Instantiate(item);
-        newItem.transform.parent = parentTransform;
-        newItem.transform.localPosition = Vector3.zero;
+        GameObject newItem = Instantiate(item, parentTransform);
         SetItem(newItem);
         savedItem = item;
         item.gameObject.SetActive(false);
